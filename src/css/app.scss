@@ -1,0 +1,44 @@
+// app global css in SCSS form
+
+@font-face {
+  font-family: title;
+  src: url(./fonts/Avenir-Roman.woff);
+}
+
+@font-face {
+  font-family: description;
+  src: url(./fonts/avenir-light.woff);
+}
+
+@font-face {
+  font-family: farsi;
+  src: url(./fonts/Yekan.woff);
+}
+
+.title-font {
+  font-family: 'title';
+}
+
+.desc-font {
+  font-family: 'description';
+}
+
+.farsi-font {
+  font-family: 'farsi';
+}
+
+body.body--dark {
+  background: #151515;
+}
+
+body.body--light {
+  background: #f3f3f3;
+}
+
+.light-class {
+  color: #1a1a1a;
+}
+
+.dark-class {
+  color: #f5f5f5
+}
