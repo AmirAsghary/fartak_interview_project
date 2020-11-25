@@ -10,11 +10,6 @@
   src: url(./fonts/avenir-light.woff);
 }
 
-@font-face {
-  font-family: farsi;
-  src: url(./fonts/Yekan.woff);
-}
-
 .title-font {
   font-family: 'title';
 }
@@ -23,22 +18,62 @@
   font-family: 'description';
 }
 
-.farsi-font {
-  font-family: 'farsi';
+body.body--light {
+  background-color: $light;
+}
+
+.body--light .q-header {
+  background-color: $light-nav;
+}
+
+.body--light .mobile .q-header {
+  border-bottom: 1px solid $light-border;
+}
+
+.body--light .q-footer {
+  border-top: 1px solid $light-border;
+  background-color: $light-nav;
+}
+
+.body--light .q-btn {
+  color: $light-btn;
+}
+
+.body--light .desktop .q-drawer {
+  background-color: transparent;
+}
+
+.body--light .mobile .q-drawer {
+  border-right: 1px solid $light-border;
+  background-color: $light-nav;
 }
 
 body.body--dark {
-  background: #151515;
+  background-color: $dark;
 }
 
-body.body--light {
-  background: #f3f3f3;
+.body--dark .q-header {
+  background-color: $dark-nav;
 }
 
-.light-class {
-  color: #1a1a1a;
+.body--dark .mobile .q-header {
+  border-bottom: 1px solid $dark-border;
 }
 
-.dark-class {
-  color: #f5f5f5
+.body--dark .q-footer {
+  border-top: 1px solid $dark-border;
+  background-color: $dark-nav;
+}
+
+.body--dark .q-btn {
+  color: $dark-btn;
+}
+
+.body--dark .desktop .q-drawer {
+  background-color: $dark-nav;
+}
+
+.body--dark .mobile .q-drawer {
+  border-right: 1px solid $dark-border;
+  background-color: $dark-nav;
 }

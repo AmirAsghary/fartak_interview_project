@@ -1,7 +1,30 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
-  failed: 'Action failed',
-  success: 'Action was successful'
+  enable: 'Enable',
+  disable: 'Disable',
+  header: {
+    search: 'Search'
+  },
+  menu: {
+    home: 'Home',
+    notifs: 'Notifications',
+    explore: 'Explore',
+    messages: 'Messages',
+    profile: 'Profile',
+    create: 'Create',
+    darkmode: 'Dark Mode'
+  },
+  feed: {
+    favs: 'Favorites'
+  },
+  posts: {
+    time: {
+      minutes: 'minutes',
+      hours: 'hours',
+      days: 'days',
+      weeks: 'weeks'
+    },
+    shares: 'Shares',
+    likes: 'Likes'
+
+  }
 }

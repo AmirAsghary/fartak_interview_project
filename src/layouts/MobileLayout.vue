@@ -1,83 +1,86 @@
 <template>
-    <q-layout view="lHh Lpr lFf">
-        <q-header reveal elevated>
-            <q-toolbar>
-                <q-btn
-                        flat
-                        dense
-                        round
-                        icon="menu"
-                        aria-label="Menu"
-                        @click="drawer.open = !drawer.open"
-                />
+  <q-layout class="mobile" view="lHh Lpr lFf">
+    <q-header :reveal-offset="650" reveal>
+      <q-toolbar>
+        <q-btn
+            aria-label="Menu"
+            dense
+            flat
+            icon="menu"
+            round
+            @click="drawer.open = !drawer.open"
+        />
+        <div class="absolute-center q-pt-sm">
+          <img :src="$q.dark.isActive ? 'dark-logo.svg':'light-logo.svg'" height="30px"/>
+        </div>
+      </q-toolbar>
+    </q-header>
 
-                <q-toolbar-title>
-                    Quasar App
-                </q-toolbar-title>
-
-            </q-toolbar>
-        </q-header>
-
-        <q-drawer
-                v-model="drawer.open"
-                show-if-above
-                bordered
-                content-class="bg-grey-1"
+    <q-drawer
+        v-model="drawer.open"
+        behavior="mobile"
+        show-if-above
+    >
+      <q-btn
+          :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          :label="$q.fullscreen.isActive ? 'Exit Fullscreen' : 'Go Fullscreen'"
+          color="secondary"
+          @click="$q.fullscreen.toggle()"
+      />
+      <q-list>
+        <q-item-label
+            class="text-grey-8"
+            header
         >
-            <q-list>
-                <q-item-label
-                        header
-                        class="text-grey-8"
-                >
-                    Essential Links
-                </q-item-label>
-                <EssentialLink
-                        v-for="link in drawer.items"
-                        :key="link.title"
-                        v-bind="link"
-                />
-            </q-list>
-        </q-drawer>
+          Essential Links
+        </q-item-label>
+        <EssentialLink
+            v-for="link in drawer.items"
+            :key="link.title"
+            v-bind="link"
+        />
+      </q-list>
+    </q-drawer>
 
-        <q-page-container>
-            <router-view class="mainContent"/>
-        </q-page-container>
+    <q-page-container>
+      <router-view class="mainContent"/>
+    </q-page-container>
 
-        <q-footer elevated>
-            <q-toolbar class="justify-around">
-                <q-btn
-                        flat
-                        dense
-                        round
-                        icon="home"
-                        aria-label="Menu"
-                        @click="drawer.open = !drawer.open"
-                />
+    <q-footer>
+      <q-toolbar class="justify-around">
+        <q-btn
+            aria-label="Menu"
+            dense
+            flat
+            icon="home"
+            round
+            @click="drawer.open = !drawer.open"
+        />
+        <q-btn
+            aria-label="search"
+            dense
+            flat
+            icon="search"
+            round
+            @click="drawer.open = !drawer.open"
+        />
+        <q-btn
+            aria-label="profile"
+            dense
+            flat
+            icon="person"
+            round
+            @click="drawer.open = !drawer.open"
+        />
 
-                <q-btn
-                        flat
-                        dense
-                        round
-                        icon="search"
-                        aria-label="search"
-                        @click="drawer.open = !drawer.open"
-                />
-                <q-btn
-                        flat
-                        dense
-                        round
-                        icon="person"
-                        aria-label="profile"
-                        @click="drawer.open = !drawer.open"
-                />
-
-            </q-toolbar>
-        </q-footer>
-    </q-layout>
+      </q-toolbar>
+    </q-footer>
+  </q-layout>
 </template>
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import { colors } from 'quasar'
 
 const linksData = [
   {
@@ -136,6 +139,7 @@ export default {
       }
     }
   },
+  methods: {},
   watch: {
     '$q.screen.width' () {
       if (this.$q.screen.width < 600) {
@@ -145,15 +149,16 @@ export default {
       }
     }
   },
-  mounted () {
+  beforeCreate () {
+    this.$q.dark.set(true)
 
+    this.$q.addressbarColor.set(colors.getBrand('dark'))
   }
 }
 </script>
 
-<style>
-    .mainContent {
-        height: 80vh;
-        width: 100vw;
-    }
+<style lang="scss">
+.mainContent {
+  width: 100vw;
+}
 </style>

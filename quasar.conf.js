@@ -100,7 +100,9 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'AddressbarColor', 'AppFullscreen'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
