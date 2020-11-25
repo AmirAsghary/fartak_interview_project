@@ -1,31 +1,31 @@
 <template>
   <q-page>
-     <q-list :key="index" v-for="(post, index) in posts">
-            <Posts
-                    :postTitle="post.title"
-                    :authorID="post.userId"
-                    :postAuthor="$store.getters['userList/getUsers'].find(user => user.id === post.userId)"
-                    :postID="post.id"
-                    :profileImgSrc="`https://picsum.photos/id/${post.userId + 69}/200/200`"
-                    :postBody="{media: `https://picsum.photos/id/${post.id}/600/900`}"
-            />
-          </q-list>
-     <q-pagination
-                v-model="pagination.page"
-                aria-label="pagination controls"
-                class="justify-center q-py-md"
-                color="primary"
-                :max="Math.ceil(pagination.totalContentSize / pagination.contentLimit)"
-                :boundary-links="true"
-                @input="fetchPosts(pagination.page)"
-        />
+    <q-list v-for="(post, index) in posts" :key="index">
+      <Posts
+          :authorID="post.userId"
+          :postAuthor="$store.getters['userList/getUsers'].find(user => user.id === post.userId)"
+          :postBody="{media: `https://picsum.photos/id/${post.id}/600/900`}"
+          :postID="post.id"
+          :postTitle="post.title"
+          :profileImgSrc="`https://picsum.photos/id/${post.userId + 69}/200/200`"
+      />
+    </q-list>
+    <q-pagination
+        v-model="pagination.page"
+        :boundary-links="true"
+        :max="Math.ceil(pagination.totalContentSize / pagination.contentLimit)"
+        aria-label="pagination controls"
+        class="justify-center q-py-md"
+        color=""
+        @input="fetchPosts(pagination.page)"
+    />
   </q-page>
 </template>
 
 <script>
 import axios from 'axios'
 import Posts from 'components/Posts.vue'
-import { instantiateDB, getTotalDeletedPosts, getUpdatedPost, getTotalUpdatedPosts } from '../controller/db-handler'
+import { getTotalDeletedPosts, getTotalUpdatedPosts, getUpdatedPost, instantiateDB } from '../controller/db-handler'
 
 export default {
   name: 'PageIndex',
@@ -45,7 +45,9 @@ export default {
     fetchPosts (page) {
       axios.get('https://jsonplaceholder.typicode.com/posts').then((res) => {
         const tdp = getTotalDeletedPosts()
-        const eligible = res.data.filter((post) => { return !tdp.includes(post.id) })
+        const eligible = res.data.filter((post) => {
+          return !tdp.includes(post.id)
+        })
         this.posts = eligible.slice((page - 1) * this.pagination.contentLimit, page * this.pagination.contentLimit)
 
         const tupc = getTotalUpdatedPosts().filter((pid) => {
@@ -55,7 +57,9 @@ export default {
         if (tupc.length > 0) {
           const tup = getUpdatedPost(null, tupc)
           tupc.forEach((pid) => {
-            this.posts[this.posts.findIndex((post) => { return post.id === pid })] = tup[pid]
+            this.posts[this.posts.findIndex((post) => {
+              return post.id === pid
+            })] = tup[pid]
           })
         }
 
@@ -79,6 +83,7 @@ export default {
           console.log(errors)
         })
       })
+      window.scrollTo(0, 0)
     },
     scrolled ({ verticalPercentage }) {
       // console.log(`at ${verticalPercentage}`)
