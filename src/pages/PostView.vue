@@ -1,17 +1,17 @@
 <template>
-  <q-page>
+  <q-page class="latin-regular">
     <q-item :aria-label="`${post.senderInfo.name}'s Post`"
             :ripple="false"
             class="q-pa-none"
     >
       <q-card class="full-width transparent cards" flat square>
-        <q-item>
-          <q-item-section avatar>
+        <q-item clickable>
+          <q-item-section avatar @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/user/${post.senderInfo.id}`)">
             <img :src="`https://picsum.photos/id/${post.senderInfo.id + 69}/200/200`" height="50px"
                  style="border-radius: 50%">
           </q-item-section>
 
-          <q-item-section class="user-info">
+          <q-item-section class="user-info" @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/user/${post.senderInfo.id}`)">
             <q-item-label>{{ post.senderInfo.name }}</q-item-label>
             <q-item-label caption>
               @{{ post.senderInfo.username }}
@@ -85,8 +85,8 @@
             2:17 PM · Nov 22, 2020
           </div>
           <div class="post-text interactions">
-            <b>23</b> likes
-            <b class="q-pl-lg">24</b> shares
+            <b>23</b> {{ $t('posts.likes') }}
+            <b class="q-pl-lg">24</b> {{ $t('posts.shares') }}
           </div>
           <q-item :class="($q.platform.is.mobile===true)?'justify-center':'justify-evenly'">
             <div class="q-mx-md">
@@ -95,7 +95,7 @@
                   class=""
                   dense
                   flat
-                  icon="comment"
+                  icon="o_comment"
                   round
               >
               </q-btn>
@@ -107,7 +107,7 @@
                   class=""
                   dense
                   flat
-                  icon="favorite"
+                  icon="o_favorite"
                   round
               />
             </div>
@@ -118,8 +118,9 @@
                   class=""
                   dense
                   flat
-                  icon="share"
+                  icon="o_share"
                   round
+                  @click="sharePost(true)"
               />
             </div>
           </q-item>
@@ -132,6 +133,7 @@
       <q-list v-for="(commenter,index) in comments.sender" :key="index" class="comments">
         <Posts
             :postAuthor="commenter"
+            :authorID="commenter.id"
             :postBody="{text: comments.text[index]}"
             :profileImgSrc="`https://picsum.photos/id/${commenter.id + 69}/200/200`"
         />
@@ -211,7 +213,6 @@ export default {
           this.comments.text.push(resp.data.quote)
           this.comments.sender.push(this.$store.getters['userList/getUsers'][Math.floor(Math.random() * 5)])
         })
-        console.log(this.comments)
       })).catch(errors => {
         // react on errors.
       })
@@ -242,6 +243,61 @@ export default {
       localStorage.setItem(`POST_${this.$route.params.postID}`, `UPDATED_${JSON.stringify(this.post.data)}`)
       this.editing.title = ''
       this.editing.body = ''
+    },
+    sharePost (grid) {
+      const shareMSG = {
+        withLink: `Hey, check out this post by ${this.post.senderInfo.name} on Fartak App. %0D%0A${this.post.title}%0D%0A${window.location}post/${this.post.data.id}`,
+        simple: `Hey, check out this post by ${this.post.senderInfo.name} on Fartak App.%0D%0A${this.post.title}`
+      }
+      this.$q.bottomSheet({
+        message: 'Share via...',
+        grid,
+        actions: [
+          {
+            label: 'Email',
+            icon: 'o_mail',
+            id: 'email'
+          },
+          {
+            label: 'Telegram',
+            icon: 'o_send',
+            id: 'telegram'
+          },
+          {
+            label: 'Twitter',
+            icon: 'o_sms',
+            id: 'twitter'
+          },
+          {
+            label: 'Copy to Clipboard',
+            icon: 'o_content_copy',
+            id: 'copy'
+          }
+        ]
+      }).onOk(action => {
+        switch (action.id) {
+          case 'twitter':
+            window.open(`https://twitter.com/intent/tweet?text=${shareMSG.withLink.split(' ').join('%20')}`)
+            break
+          case 'email':
+            window.open(`mailto:user@mail.com?body=${shareMSG.withLink.split(' ').join('%20')}`)
+            break
+          case 'telegram':
+            window.open(`https://t.me/share/url?url=${window.location}post/${this.post.data.id}&text=${shareMSG.simple}`)
+            break
+          case 'copy':
+            navigator.clipboard.writeText(`Hey, check out this post by ${this.post.senderInfo.name} on Fartak App.\n${this.post.data.title}\n${window.location}post/${this.post.data.id}`)
+              .then(function () {
+              }, function () {
+                console.error('copying post data failed.')
+              })
+            break
+        }
+      }).onCancel(() => {
+        // console.log('Dismissed')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
     }
   }
 }
@@ -281,9 +337,7 @@ export default {
   position: relative;
   left: 4.5rem;
   max-height: 20rem;
-  max-width: 80%;
-  font-family: title, Tahoma, sans-serif;
-  font-size: 1em;
+  max-width: 75%;
   line-height: 1.1em;
   font-weight: 300;
   text-transform: capitalize;

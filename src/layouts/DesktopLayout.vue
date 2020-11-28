@@ -1,7 +1,7 @@
 <template>
   <q-layout class="desktop" view="hHh Lpr lff">
     <q-header class="transparent">
-      <q-toolbar class="wrapper">
+      <q-toolbar class="wrapper bg-transparent">
         <div class="box header-left-panel">
           <q-btn
               v-if="viewMode==='compact'"
@@ -13,32 +13,33 @@
               style="position: absolute; left: 13px; top: 10px"
               @click="drawer.open = !drawer.open"
           />
+          <q-btn
+              v-if="viewMode==='compact'"
+              aria-label="Dark mode"
+              dense
+              flat
+              :icon="$q.dark.isActive ? 'wb_sunny':'brightness_3'"
+              :color="$q.dark.isActive ? 'yellow-3':''"
+              round
+              style="position: absolute; left: 13px; top:92vh;"
+              @click="$q.dark.toggle()"
+          >
+            <q-tooltip :offset="[-2,5]" anchor="top right" self="center left">
+              {{ $q.dark.isActive ? $t('disable'):$t('enable') }} {{ $t('menu.darkmode') }}
+            </q-tooltip>
+          </q-btn>
           <!--                    <div id="nest2"></div>-->
         </div>
         <div class="box header-main-panel">
 
         </div>
         <div class="box header-right-panel">
-          <q-input v-if="$q.screen.width>=1100" v-model="search" dense outlined placeholder="Search" rounded>
+          <q-input v-if="$q.screen.width>=1100" v-model="search" dense outlined :placeholder="$t('header.search')" rounded>
             <template v-slot:append>
-              <q-icon v-if="search !== ''" class="cursor-pointer" name="close" @click="search = ''"/>
-              <q-icon name="search"/>
+              <q-icon v-if="search !== ''" class="cursor-pointer" name="o_close" @click="search = ''"/>
+              <q-icon name="o_search"/>
             </template>
           </q-input>
-          <q-btn
-              v-if="viewMode==='compact'"
-              aria-label="Dark mode"
-              dense
-              flat
-              icon="nights_stay"
-              round
-              style="position: absolute; left: 13px; top:92vh"
-              @click="$q.dark.toggle()"
-          >
-            <q-tooltip :offset="[-2,5]" anchor="top right" self="center left">
-              Enable Dark Mode
-            </q-tooltip>
-          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -54,46 +55,14 @@
         show-if-above
     >
       <q-scroll-area class="fit">
-        <q-list padding>
-          <q-item v-ripple clickable>
+        <q-list v-for="(item, index) in drawer.items" v-bind:key="index" padding>
+          <q-item v-ripple clickable @click="leftDrawerClicked(item)">
             <q-item-section avatar>
-              <q-icon name="inbox"/>
+              <q-icon :name="item.icon"/>
             </q-item-section>
 
             <q-item-section>
-              Inbox
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple active clickable>
-            <q-item-section avatar>
-              <q-icon name="star"/>
-            </q-item-section>
-
-            <q-item-section>
-              Star
-            </q-item-section>
-          </q-item>
-
-          <q-item v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon name="send"/>
-            </q-item-section>
-
-            <q-item-section>
-              Send
-            </q-item-section>
-          </q-item>
-
-          <q-separator/>
-
-          <q-item v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon name="drafts"/>
-            </q-item-section>
-
-            <q-item-section>
-              Drafts
+              {{ $t(item.title) }}
             </q-item-section>
           </q-item>
         </q-list>
@@ -117,9 +86,9 @@
               <q-icon :name="item.icon" size="md"/>
             </q-item-section>
 
-            <q-item-section class="text-menu">{{ item.title }}</q-item-section>
+            <q-item-section class="text-menu">{{ $t(item.title) }}</q-item-section>
           </q-item>
-          <q-btn class="q-mt-lg full-width" color="primary" label="Create" padding="md" rounded unelevated/>
+          <q-btn class="q-mt-lg full-width" color="primary" :label="$t('menu.create')" padding="md" rounded unelevated/>
         </q-list>
       </div>
       <div class="box body-main-panel">
@@ -136,26 +105,26 @@
 <script>
 import FeedActivity from 'components/FeedActivity'
 
-const linksData = [
+const drawerItems = [
   {
-    title: 'Home',
+    title: 'menu.home',
     icon: 'home',
     path: '/'
   },
   {
-    title: 'Notifications',
+    title: 'menu.notifs',
     icon: 'notifications'
   },
   {
-    title: 'Explore',
+    title: 'menu.explore',
     icon: 'explore'
   },
   {
-    title: 'Messages',
+    title: 'menu.messages',
     icon: 'inbox'
   },
   {
-    title: 'Profile',
+    title: 'menu.profile',
     icon: 'person'
   }
 ]
@@ -174,7 +143,7 @@ export default {
       drawer: {
         miniState: false,
         open: false,
-        items: linksData
+        items: drawerItems
       },
       search: ''
     }
@@ -182,7 +151,7 @@ export default {
   methods: {
     leftDrawerClicked (item) {
       this.activeItem = item.title
-      if (item.title.toLowerCase() === 'home') {
+      if (item.path === '/') {
         this.$router.push('/')
       }
     }

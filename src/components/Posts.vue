@@ -2,11 +2,10 @@
   <q-item :aria-label="`${postAuthor.name}'s Post`"
           :clickable="postTitle!==undefined"
           :ripple="false"
-          class="q-pa-none"
-          @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/post/${postID}`)"
+          class="q-pa-none latin-regular"
   >
     <q-card class="full-width transparent card" flat square>
-      <q-item>
+      <q-item clickable @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/user/${authorID}`)">
         <q-item-section avatar>
           <q-avatar>
             <img :src="profileImgCalc">
@@ -14,23 +13,25 @@
         </q-item-section>
 
         <q-item-section class="user-info">
-          <q-item-label>{{ postAuthor.name }}</q-item-label>
-          <q-item-label>
+          <q-item-label class="latin-bold" style="font-size: small">{{ postAuthor.name }}</q-item-label>
+          <q-item-label class="" style="font-size: small; margin-top: 2px">
             @{{ postAuthor.username }}
           </q-item-label>
-          <q-item-label>
+          <q-item-label style="font-size: smaller; margin-top: 0">
             4 hours ago
           </q-item-label>
         </q-item-section>
       </q-item>
 
-      <div class="post-text">
+      <div class="post-text"
+           @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/post/${postID}`)">
         <p v-if="postTitle">{{ postTitle }}</p>
 
         <p v-if="postBody.text" :class="postTitle ? '':'comment'" class="body">{{ postBody.text }}</p>
       </div>
 
-      <div v-if="postBody.media" class="body-img" style="border-radius: 2%">
+      <div v-if="postBody.media" class="body-img" style="border-radius: 2%"
+           @click="$router.push((($q.platform.is.mobile===true)?'/mobile':'') + `/post/${postID}`)">
         <img :class="($q.platform.is.mobile===true) ? 'compact':'desktop'" :src="postBody.media"
              style="border-radius: 2%">
       </div>
@@ -42,7 +43,7 @@
               class=""
               dense
               flat
-              icon="comment"
+              icon="o_comment"
               round
               @click="drawer.open = !drawer.open"
           >
@@ -56,7 +57,7 @@
               class=""
               dense
               flat
-              icon="favorite"
+              icon="o_favorite"
               round
               @click="drawer.open = !drawer.open"
           />
@@ -69,9 +70,9 @@
               class=""
               dense
               flat
-              icon="share"
+              icon="o_share"
               round
-              @click="drawer.open = !drawer.open"
+              @click="sharePost(true)"
           />
           <span class="text-caption">22</span>
         </div>
@@ -86,6 +87,61 @@ export default {
   methods: {
     bodyImgCalc () {
       return (this.postBody.media || 'https://imgs3.fontbrain.com/imgs/58/0d/0778ad254335be45bf58bb449f43/pt-720x360-5f5562.png')
+    },
+    sharePost (grid) {
+      const shareMSG = {
+        withLink: `Hey, check out this post by ${this.postAuthor.name} on Fartak App. %0D%0A${this.postTitle}%0D%0A${window.location}post/${this.postID}`,
+        simple: `Hey, check out this post by ${this.postAuthor.name} on Fartak App.%0D%0A${this.postTitle}`
+      }
+      this.$q.bottomSheet({
+        message: 'Share via...',
+        grid,
+        actions: [
+          {
+            label: 'Email',
+            icon: 'o_mail',
+            id: 'email'
+          },
+          {
+            label: 'Telegram',
+            icon: 'o_send',
+            id: 'telegram'
+          },
+          {
+            label: 'Twitter',
+            icon: 'o_sms',
+            id: 'twitter'
+          },
+          {
+            label: 'Copy to Clipboard',
+            icon: 'o_content_copy',
+            id: 'copy'
+          }
+        ]
+      }).onOk(action => {
+        switch (action.id) {
+          case 'twitter':
+            window.open(`https://twitter.com/intent/tweet?text=${shareMSG.withLink.split(' ').join('%20')}`)
+            break
+          case 'email':
+            window.open(`mailto:user@mail.com?body=${shareMSG.withLink.split(' ').join('%20')}`)
+            break
+          case 'telegram':
+            window.open(`https://t.me/share/url?url=${window.location}post/${this.postID}&text=${shareMSG.simple}`)
+            break
+          case 'copy':
+            navigator.clipboard.writeText(`Hey, check out this post by ${this.postAuthor.name} on Fartak App.\n${this.postTitle}\n${window.location}post/${this.postID}`)
+              .then(function () {
+              }, function () {
+                console.error('copying post data failed.')
+              })
+            break
+        }
+      }).onCancel(() => {
+        // console.log('Dismissed')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
     }
   },
   props: {
@@ -158,11 +214,9 @@ export default {
   position: relative;
   left: 4.5rem;
   max-height: 20rem;
-  max-width: 80%;
-  font-family: title, Tahoma, sans-serif;
+  max-width: 75%;
   font-size: 1em;
-  line-height: 1.1em;
-  font-weight: 400;
+  line-height: 1.15em;
   text-transform: capitalize;
 }
 

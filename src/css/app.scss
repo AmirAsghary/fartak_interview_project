@@ -1,79 +1,72 @@
-// app global css in SCSS form
-
 @font-face {
-  font-family: title;
-  src: url(./fonts/Avenir-Roman.woff);
+  font-family: open-sans-regular;
+  src: url(./fonts/open-sans-v18-latin-regular.woff);
 }
-
 @font-face {
-  font-family: description;
-  src: url(./fonts/avenir-light.woff);
+  font-family: open-sans-600;
+  src: url(./fonts/open-sans-v18-latin-600.woff);
+}
+@font-face {
+  font-family: latin-bolder-800;
+  src: url(./fonts/open-sans-v18-latin-800.woff);
 }
 
-.title-font {
-  font-family: 'title';
+.latin-regular {
+  font-family: 'open-sans-regular', sans-serif;
 }
-
-.desc-font {
-  font-family: 'description';
+.latin-bold {
+  font-family: 'open-sans-600', sans-serif;
+}
+.latin-bolder {
+  font-family: 'latin-bolder-800', sans-serif;
 }
 
 body.body--light {
   background-color: $light;
 }
-
 .body--light .q-header {
   background-color: $light-nav;
 }
-
 .body--light .mobile .q-header {
   border-bottom: 1px solid $light-border;
 }
-
-.body--light .q-footer {
+.body--light .q-toolbar {
   border-top: 1px solid $light-border;
   background-color: $light-nav;
 }
-
 .body--light .q-btn {
   color: $light-btn;
 }
-
 .body--light .desktop .q-drawer {
   background-color: transparent;
 }
-
-.body--light .mobile .q-drawer {
-  border-right: 1px solid $light-border;
-  background-color: $light-nav;
+.body--light .bottom-drawer {
+  background-color: rgba($light-nav, 0.9);
+  backdrop-filter: blur(10px);
 }
 
 body.body--dark {
   background-color: $dark;
 }
-
 .body--dark .q-header {
   background-color: $dark-nav;
 }
-
 .body--dark .mobile .q-header {
   border-bottom: 1px solid $dark-border;
 }
-
-.body--dark .q-footer {
+.body--dark .q-toolbar {
   border-top: 1px solid $dark-border;
   background-color: $dark-nav;
 }
-
 .body--dark .q-btn {
   color: $dark-btn;
 }
-
 .body--dark .desktop .q-drawer {
   background-color: $dark-nav;
 }
-
-.body--dark .mobile .q-drawer {
-  border-right: 1px solid $dark-border;
-  background-color: $dark-nav;
+.body--dark .bottom-drawer {
+  background-color: rgba($dark-nav, 0.8);
+  backdrop-filter: blur(10px);
+}
+.body--dark .bottom-drawer .drawer-items {
 }

@@ -4,7 +4,8 @@ const routes = [
     component: () => import('layouts/DesktopLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'post/:postID', component: () => import('pages/PostView.vue'), props: true }
+      { path: 'post/:postID', component: () => import('pages/PostView.vue'), props: true },
+      { path: 'user/:userID', component: () => import('pages/ProfileView.vue'), props: true }
     ]
   },
 
@@ -13,7 +14,8 @@ const routes = [
     component: () => import('layouts/MobileLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue') },
-      { path: 'post/:postID', component: () => import('pages/PostView.vue'), props: true }
+      { path: 'post/:postID', component: () => import('pages/PostView.vue'), props: true },
+      { path: 'user/:userID', component: () => import('pages/ProfileView.vue'), props: true }
     ]
   },
 

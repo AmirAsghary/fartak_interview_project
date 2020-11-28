@@ -2,7 +2,7 @@
   <q-card class="transparent" flat>
     <q-item>
       <q-item-section>
-        <q-item-label>Favorites</q-item-label>
+        <q-item-label>{{ $t('feed.favs') }}</q-item-label>
       </q-item-section>
     </q-item>
 

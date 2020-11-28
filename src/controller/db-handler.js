@@ -7,7 +7,13 @@ const namespaces = {
   theme: 'THEME'
 }
 
-export function instantiateDB (FETCH, THEME) {
+const THEME = function (dark) {
+  return JSON.stringify({
+    dark: dark
+  })
+}
+
+export function instantiateDB (FETCH) {
   console.group('instantiating localstorage databases: ')
 
   if (localStorage.getItem(`${namespaces.config}${namespaces.fetch}`) === null) {
@@ -16,7 +22,7 @@ export function instantiateDB (FETCH, THEME) {
   }
   if (localStorage.getItem(`${namespaces.config}${namespaces.theme}`) === null) {
     console.log('THEME Config...')
-    localStorage.setItem(`${namespaces.config}${namespaces.theme}`, JSON.stringify(THEME || {}))
+    localStorage.setItem(`${namespaces.config}${namespaces.theme}`, JSON.stringify(THEME(false)))
   }
 
   console.log('done...')
@@ -88,5 +94,17 @@ export function getUpdatedPost (id, Batch) {
   } catch (e) {
     console.warn(e)
     return localStorage.getItem(`${namespaces.post}${id}`)
+  }
+}
+
+export function setThemeConfig (dark) {
+  localStorage.setItem(`${namespaces.config}${namespaces.theme}`, THEME(dark))
+}
+
+export function getThemeConfig (key, Keys) {
+  if (Keys) {
+
+  } else {
+    return JSON.parse(localStorage.getItem(`${namespaces.config}${namespaces.theme}`))[key]
   }
 }
