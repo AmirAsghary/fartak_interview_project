@@ -18,7 +18,7 @@
             aria-label="Menu"
             dense
             flat
-            icon="o_home"
+            icon="home"
             round
             @click="navBarHandle({title:'home',path:'/'})"
         />
@@ -26,7 +26,7 @@
             aria-label="search"
             dense
             flat
-            icon="o_menu"
+            icon="menu"
             round
             @click="show()"
         />
@@ -34,7 +34,7 @@
             aria-label="profile"
             dense
             flat
-            icon="o_person"
+            icon="person"
             round
             @click="drawer.open = !drawer.open"
         />
@@ -46,7 +46,7 @@
               aria-label="Menu"
               dense
               flat
-              icon="o_home"
+              icon="home"
               round
               @click="navBarHandle({title:'home',path:'/'})"
           />
@@ -54,7 +54,7 @@
               aria-label="menu"
               dense
               flat
-              icon="o_menu"
+              icon="menu"
               round
               @click="hide()"
           />
@@ -62,7 +62,7 @@
               aria-label="search"
               dense
               flat
-              icon="o_search"
+              icon="search"
               round
               @click="drawer.open = !drawer.open"
           />
@@ -170,6 +170,7 @@ export default {
   },
   beforeCreate () {
     this.$q.dark.set(getThemeConfig('dark'))
+    this.$q.addressbarColor.set(this.$q.dark.isActive ? '#1b1b1b' : '#f9f9f9')
   }
 }
 </script>

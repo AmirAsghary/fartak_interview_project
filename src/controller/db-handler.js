@@ -14,7 +14,7 @@ const THEME = function (dark) {
 }
 
 export function instantiateDB (FETCH) {
-  console.group('instantiating localstorage databases: ')
+  console.log('instantiating localstorage databases')
 
   if (localStorage.getItem(`${namespaces.config}${namespaces.fetch}`) === null) {
     console.log('FETCH Config...')
@@ -26,7 +26,6 @@ export function instantiateDB (FETCH) {
   }
 
   console.log('done...')
-  console.groupEnd()
 }
 
 export function getDeletedPosts (page, limit) {
@@ -41,7 +40,7 @@ export function getDeletedPosts (page, limit) {
 
 export function getTotalDeletedPosts () {
   const deletedPosts = []
-  console.group('retrieving total deleted posts: ')
+  console.log('retrieving total deleted posts')
 
   for (const key of Object.keys(localStorage)) {
     if (key.slice(0, 5) === namespaces.post && localStorage[key] === namespaces.deleted) {
@@ -52,14 +51,13 @@ export function getTotalDeletedPosts () {
   }
 
   console.log(`found ${deletedPosts.length} deleted posts.`)
-  console.groupEnd()
 
   return deletedPosts
 }
 
 export function getTotalUpdatedPosts () {
   const updatedPosts = []
-  console.group('retrieving total updated posts: ')
+  console.log('retrieving total updated posts')
 
   for (const key of Object.keys(localStorage)) {
     if (key.slice(0, 5) === namespaces.post && localStorage[key].slice(0, namespaces.updated.length) === namespaces.updated) {
@@ -70,13 +68,12 @@ export function getTotalUpdatedPosts () {
   }
 
   console.log(`found ${updatedPosts.length} updated posts.`)
-  console.groupEnd()
 
   return updatedPosts
 }
 
 export function getUpdatedPost (id, Batch) {
-  console.group(`retrieving updated posts:\n\t ${Batch || id}`)
+  console.log(`retrieving updated posts:\n\t ${Batch || id}`)
 
   if (Batch) {
     const posts = {}
@@ -87,7 +84,6 @@ export function getUpdatedPost (id, Batch) {
     return posts
   }
   console.log('returning...')
-  console.groupEnd()
 
   try {
     return JSON.parse(localStorage.getItem(`${namespaces.post}${id}`).slice(namespaces.updated.length))
