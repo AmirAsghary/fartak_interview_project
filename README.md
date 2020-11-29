@@ -1,4 +1,3 @@
-# Fartak Interview Project
 
 <details>
 <summary>Tasks</summary>
